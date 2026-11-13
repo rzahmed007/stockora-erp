@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none">
+  <rect width="48" height="48" x="6" y="6" rx="10" fill="#003A41"/>
+  <path d="M22 20h16v5H22zM22 28h16v5H22zM22 36h11v5H22z" fill="#FFFFFF"/>
+  <circle cx="39" cy="38.5" r="3.5" fill="#58AFB7"/>
+  <text x="66" y="38" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="700" fill="#1D1B1A">STOCK<tspan fill="#003A41">ORA</tspan></text>
+</svg>
+
