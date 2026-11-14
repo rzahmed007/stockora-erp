@@ -22,7 +22,7 @@ const SUGGESTIONS = [
     label: 'Invoice #INV-2024-0891 (₹1,42,000)',
     meta: 'Dispatched Today • Cash Partial',
     icon: FileText,
-    href: '/wholesale-sales',
+    href: '/sales',
   },
   {
     type: 'product',
@@ -144,7 +144,7 @@ export function HeaderSearch() {
               </Link>
               •
               <Link
-                to="/wholesale-sales"
+                to="/sales"
                 onClick={() => setIsOpen(false)}
                 className="hover:text-[#003A41] dark:hover:text-[#58AFB7] font-medium"
               >

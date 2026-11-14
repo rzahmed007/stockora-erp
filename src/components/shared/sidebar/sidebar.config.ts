@@ -1,11 +1,10 @@
 import {
   LayoutDashboard,
-  Receipt,
+  ShoppingBag,
   MapPin,
   Package,
   Boxes,
   ShoppingCart,
-  Truck,
   Users,
   Route,
   HardHat,
@@ -53,11 +52,6 @@ export const sidebarSections: SidebarSection[] = [
         icon: LayoutDashboard,
       },
       {
-        title: 'Retail POS',
-        href: '/retail-pos',
-        icon: Receipt,
-      },
-      {
         title: 'Locations',
         href: '/locations',
         icon: MapPin,
@@ -75,6 +69,19 @@ export const sidebarSections: SidebarSection[] = [
     id: 'operations',
     title: 'Operations',
     items: [
+      {
+        title: 'Sales',
+        href: '/sales',
+        icon: ShoppingBag,
+        badge: 'Live',
+        children: [
+          { title: 'All Sales', href: '/sales' },
+          { title: 'New Sale', href: '/sales/new' },
+          { title: 'Sales Orders', href: '/sales/orders' },
+          { title: 'Sales Invoices', href: '/sales/invoices' },
+          { title: 'Sales Returns', href: '/sales/returns' },
+        ],
+      },
       {
         title: 'Inventory',
         href: '/inventory',
@@ -96,17 +103,6 @@ export const sidebarSections: SidebarSection[] = [
           { title: 'Mandi Inward', href: '/purchases' },
           { title: 'Farmer Purchases', href: '/purchases/farmers' },
           { title: 'Supplier Bills', href: '/purchases/bills' },
-        ],
-      },
-      {
-        title: 'Wholesale Sales',
-        href: '/wholesale-sales',
-        icon: Truck,
-        badge: 'Live',
-        children: [
-          { title: 'All Invoices', href: '/wholesale-sales' },
-          { title: 'New Sale Order', href: '/wholesale-sales/new' },
-          { title: 'Dispatches', href: '/wholesale-sales/dispatches' },
         ],
       },
       {

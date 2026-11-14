@@ -9,6 +9,13 @@ import {
 } from '@/features/auth';
 import { AppLayout } from '@/app/layouts/AppLayout';
 import { DashboardPage } from '@/features/dashboard';
+import {
+  AllSalesPage,
+  NewSalePage,
+  SalesOrdersPage,
+  SalesInvoicesPage,
+  SalesReturnsPage,
+} from '@/features/sales';
 import { ModulePlaceholder } from '@/components/shared/ModulePlaceholder';
 
 export function AppRoutes() {
@@ -30,14 +37,19 @@ export function AppRoutes() {
       <Route element={<AppLayout />}>
         {/* Core Management */}
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/retail-pos" element={<ModulePlaceholder />} />
         <Route path="/locations/*" element={<ModulePlaceholder />} />
         <Route path="/products/*" element={<ModulePlaceholder />} />
 
-        {/* Operations & Modules */}
+        {/* Operations & Modules: Unified Sales Module */}
+        <Route path="/sales" element={<AllSalesPage />} />
+        <Route path="/sales/new" element={<NewSalePage />} />
+        <Route path="/sales/orders" element={<SalesOrdersPage />} />
+        <Route path="/sales/invoices" element={<SalesInvoicesPage />} />
+        <Route path="/sales/returns" element={<SalesReturnsPage />} />
+
+        {/* Operations & Modules: Supply Chain */}
         <Route path="/inventory/*" element={<ModulePlaceholder />} />
         <Route path="/purchases/*" element={<ModulePlaceholder />} />
-        <Route path="/wholesale-sales/*" element={<ModulePlaceholder />} />
         <Route path="/customers/*" element={<ModulePlaceholder />} />
         <Route path="/transport/*" element={<ModulePlaceholder />} />
         <Route path="/labour/*" element={<ModulePlaceholder />} />
@@ -55,7 +67,11 @@ export function AppRoutes() {
         <Route path="/users/*" element={<ModulePlaceholder />} />
         <Route path="/settings/*" element={<ModulePlaceholder />} />
 
-        {/* Backwards compatibility */}
+        {/* Backwards compatibility redirects for legacy Retail POS & Wholesale Sales */}
+        <Route path="/retail-pos" element={<Navigate to="/sales/new?type=retail" replace />} />
+        <Route path="/wholesale-sales/new" element={<Navigate to="/sales/new?type=wholesale" replace />} />
+        <Route path="/wholesale-sales/*" element={<Navigate to="/sales" replace />} />
+        <Route path="/wholesale-sales" element={<Navigate to="/sales" replace />} />
         <Route path="/suppliers" element={<ModulePlaceholder />} />
       </Route>
 

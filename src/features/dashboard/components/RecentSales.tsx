@@ -66,7 +66,7 @@ export function RecentSales({ sales }: RecentSalesProps) {
         </div>
 
         <Link
-          to="/wholesale-sales"
+          to="/sales"
           className="text-xs font-semibold text-[#003A41] dark:text-[#58AFB7] hover:underline inline-flex items-center gap-1"
         >
           <span>View All Sales</span>

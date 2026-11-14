@@ -14,11 +14,11 @@ import { useNavigate } from 'react-router-dom';
 const ACTIONS = [
   {
     id: 'new-sale',
-    title: 'New Wholesale Sale',
-    desc: 'Generate tax invoice & dispatch slip',
+    title: 'New Sale',
+    desc: 'Retail counter POS or wholesale mandi sale',
     icon: PlusCircle,
     color: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400',
-    route: '/wholesale-sales',
+    route: '/sales/new',
   },
   {
     id: 'new-purchase',
