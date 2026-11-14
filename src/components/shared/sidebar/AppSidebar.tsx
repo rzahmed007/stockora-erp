@@ -31,16 +31,16 @@ export function AppSidebar({
         />
       )}
 
-      {/* Sidebar Container */}
+      {/* Sidebar Container with 60FPS fluid width transition */}
       <aside
         className={cn(
-          'transition-all duration-300 ease-in-out z-50',
-          // Desktop positioning
+          'transition-[width] duration-300 ease-in-out z-30 shrink-0 select-none',
+          // Desktop sizing
           'hidden lg:flex flex-col',
-          isCollapsed ? 'w-[80px]' : 'w-[270px]',
-          // Mobile positioning (drawer)
+          isCollapsed ? 'w-[76px]' : 'w-[270px]',
+          // Mobile drawer
           isMobileOpen &&
-            'fixed inset-y-0 left-0 w-[280px] flex p-3 lg:p-0 z-50',
+            'fixed inset-y-0 left-0 w-[285px] flex p-3 lg:p-0 z-50',
           className
         )}
       >
@@ -49,7 +49,7 @@ export function AppSidebar({
             'flex flex-col h-full w-full',
             'bg-[#F4F5F7] dark:bg-[#161B22]',
             'border border-[#E5E7EB] dark:border-gray-800',
-            'rounded-3xl p-3.5 sm:p-4 shadow-xs select-none'
+            'rounded-3xl p-3 sm:p-3.5 shadow-xs transition-colors duration-200'
           )}
         >
           <SidebarHeader

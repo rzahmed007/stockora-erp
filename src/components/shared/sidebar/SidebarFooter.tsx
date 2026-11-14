@@ -7,10 +7,10 @@ interface SidebarFooterProps {
 export function SidebarFooter({ isCollapsed }: SidebarFooterProps) {
   if (isCollapsed) {
     return (
-      <div className="pt-3 border-t border-[#E5E7EB]/70 dark:border-gray-800/80 flex justify-center">
+      <div className="pt-3 pb-1 border-t border-[#E5E7EB]/70 dark:border-gray-800/80 flex items-center justify-center">
         <div
-          className="h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-500/20"
-          title="Mandi Sync: Active"
+          className="h-3 w-3 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20 animate-pulse"
+          title="Mandi Sync: Active (3 Branches Online)"
         />
       </div>
     );
@@ -18,7 +18,7 @@ export function SidebarFooter({ isCollapsed }: SidebarFooterProps) {
 
   return (
     <div className="pt-3 border-t border-[#E5E7EB]/70 dark:border-gray-800/80">
-      <div className="p-3 rounded-2xl bg-white/70 dark:bg-gray-800/70 border border-[#E5E7EB]/50 dark:border-gray-700/50 flex items-center justify-between">
+      <div className="p-3 rounded-2xl bg-white/80 dark:bg-gray-850/80 border border-[#E5E7EB]/50 dark:border-gray-700/50 flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-2.5">
           <div className="h-8 w-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
             <ShieldCheck className="h-4 w-4" />
