@@ -1,3 +1,5 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { sidebarSections } from './sidebar.config';
 import { SidebarMenuItem } from './SidebarMenuItem';
 
@@ -10,11 +12,47 @@ export function SidebarNavigation({
   isCollapsed,
   onItemClick,
 }: SidebarNavigationProps) {
+  const location = useLocation();
+
+  // Find which parent module matches the current route
+  const getActiveParentHref = useCallback((): string | null => {
+    for (const section of sidebarSections) {
+      for (const item of section.items) {
+        if (item.children && item.children.length > 0) {
+          const isMatch = item.children.some(
+            (child) =>
+              location.pathname === child.href ||
+              (child.href !== '/' && location.pathname.startsWith(child.href))
+          );
+          if (isMatch) return item.href;
+        }
+      }
+    }
+    return null;
+  }, [location.pathname]);
+
+  // Behavior: Only ONE primary module should be expanded at a time
+  const [openModuleHref, setOpenModuleHref] = useState<string | null>(() =>
+    getActiveParentHref()
+  );
+
+  // Sync open module when route changes
+  useEffect(() => {
+    const activeHref = getActiveParentHref();
+    if (activeHref) {
+      setOpenModuleHref(activeHref);
+    }
+  }, [getActiveParentHref]);
+
+  const handleToggle = (href: string) => {
+    setOpenModuleHref((prev) => (prev === href ? null : href));
+  };
+
   return (
-    <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-4 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800">
+    <nav className="py-2 space-y-4">
       {sidebarSections.map((section, idx) => (
         <div key={section.id} className="space-y-1">
-          {/* Subtle section label when expanded */}
+          {/* Section title (visible when expanded) */}
           {!isCollapsed && (
             <div className="px-3 pb-1 pt-1 flex items-center justify-between text-[10px] font-bold tracking-wider uppercase text-[#9CA3AF] dark:text-gray-500">
               <span>{section.title}</span>
@@ -33,6 +71,8 @@ export function SidebarNavigation({
                 key={item.href}
                 item={item}
                 isCollapsed={isCollapsed}
+                isOpen={openModuleHref === item.href}
+                onToggle={() => handleToggle(item.href)}
                 onItemClick={onItemClick}
               />
             ))}

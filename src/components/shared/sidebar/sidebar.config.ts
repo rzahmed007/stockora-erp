@@ -1,14 +1,21 @@
 import {
   LayoutDashboard,
-  Boxes,
-  Truck,
   Receipt,
-  ShoppingCart,
-  Users,
-  Building,
   MapPin,
+  Package,
+  Boxes,
+  ShoppingCart,
+  Truck,
+  Users,
+  Route,
+  HardHat,
+  UserCheck,
+  Landmark,
   Calculator,
+  Coins,
   BarChart3,
+  Bell,
+  UserCog,
   Settings,
   LucideIcon,
 } from 'lucide-react';
@@ -34,12 +41,10 @@ export interface SidebarSection {
   items: SidebarNavItem[];
 }
 
-// User specified exact ordering:
-// Upper section: Dashboard, Retail POS, Suppliers, Daily Closing, Reports & P&L
-// Lower section: Parent and child modules (Inventory, Wholesale Sales, Purchases, Customers & Credit, Locations, Settings)
 export const sidebarSections: SidebarSection[] = [
+  // 1. CORE MANAGEMENT
   {
-    id: 'primary-direct',
+    id: 'core-management',
     title: 'Core Management',
     items: [
       {
@@ -53,25 +58,22 @@ export const sidebarSections: SidebarSection[] = [
         icon: Receipt,
       },
       {
-        title: 'Suppliers',
-        href: '/suppliers',
-        icon: Building,
+        title: 'Locations',
+        href: '/locations',
+        icon: MapPin,
       },
       {
-        title: 'Daily Closing',
-        href: '/daily-closing',
-        icon: Calculator,
-      },
-      {
-        title: 'Reports & P&L',
-        href: '/reports',
-        icon: BarChart3,
+        title: 'Products',
+        href: '/products',
+        icon: Package,
       },
     ],
   },
+
+  // 2. OPERATIONS
   {
-    id: 'operations-modules',
-    title: 'Operations & Modules',
+    id: 'operations',
+    title: 'Operations',
     items: [
       {
         title: 'Inventory',
@@ -87,22 +89,24 @@ export const sidebarSections: SidebarSection[] = [
         ],
       },
       {
-        title: 'Wholesale Sales',
-        href: '/wholesale-sales',
-        icon: Truck,
-        children: [
-          { title: 'All Invoices', href: '/wholesale-sales' },
-          { title: 'New Sale Order', href: '/wholesale-sales/new' },
-          { title: 'Dispatches', href: '/wholesale-sales/dispatches' },
-        ],
-      },
-      {
         title: 'Purchases',
         href: '/purchases',
         icon: ShoppingCart,
         children: [
           { title: 'Mandi Inward', href: '/purchases' },
+          { title: 'Farmer Purchases', href: '/purchases/farmers' },
           { title: 'Supplier Bills', href: '/purchases/bills' },
+        ],
+      },
+      {
+        title: 'Wholesale Sales',
+        href: '/wholesale-sales',
+        icon: Truck,
+        badge: 'Live',
+        children: [
+          { title: 'All Invoices', href: '/wholesale-sales' },
+          { title: 'New Sale Order', href: '/wholesale-sales/new' },
+          { title: 'Dispatches', href: '/wholesale-sales/dispatches' },
         ],
       },
       {
@@ -112,23 +116,86 @@ export const sidebarSections: SidebarSection[] = [
         badge: 'Udhar',
         children: [
           { title: 'Customer Directory', href: '/customers' },
-          { title: 'Udhar Ledger', href: '/customer-credit' },
+          { title: 'Ledger / Udhar Book', href: '/customer-credit' },
+          { title: 'Payments & Collections', href: '/customers/payments' },
         ],
       },
       {
-        title: 'Locations',
-        href: '/locations',
-        icon: MapPin,
+        title: 'Transport',
+        href: '/transport',
+        icon: Route,
+      },
+      {
+        title: 'Labour',
+        href: '/labour',
+        icon: HardHat,
+      },
+      {
+        title: 'Employees',
+        href: '/employees',
+        icon: UserCheck,
+      },
+    ],
+  },
+
+  // 3. FINANCE & REPORTING
+  {
+    id: 'finance-reporting',
+    title: 'Finance & Reporting',
+    items: [
+      {
+        title: 'Accounting',
+        href: '/accounting',
+        icon: Landmark,
+      },
+      {
+        title: 'Daily Closing',
+        href: '/daily-closing',
+        icon: Calculator,
+      },
+      {
+        title: 'Expenses',
+        href: '/expenses',
+        icon: Coins,
+      },
+      {
+        title: 'Reports & Analytics',
+        href: '/reports',
+        icon: BarChart3,
         children: [
-          { title: 'Shop (Mandi Yard)', href: '/locations/shop' },
-          { title: 'Cold Storage Hub', href: '/locations/warehouse' },
-          { title: 'Central Godown', href: '/locations/godown' },
+          { title: 'Sales Reports', href: '/reports/sales' },
+          { title: 'Stock Movement', href: '/reports/inventory' },
+          { title: 'Profit & Loss (P&L)', href: '/reports/pnl' },
         ],
+      },
+    ],
+  },
+
+  // 4. SYSTEM
+  {
+    id: 'system',
+    title: 'System',
+    items: [
+      {
+        title: 'Notifications',
+        href: '/notifications',
+        icon: Bell,
+        badge: 3,
+      },
+      {
+        title: 'Users & Administration',
+        href: '/users',
+        icon: UserCog,
       },
       {
         title: 'Settings',
         href: '/settings',
         icon: Settings,
+        children: [
+          { title: 'Business Profile', href: '/settings' },
+          { title: 'Mandi Cess & Tax', href: '/settings/tax' },
+          { title: 'Printers & Weighbridge', href: '/settings/hardware' },
+        ],
       },
     ],
   },

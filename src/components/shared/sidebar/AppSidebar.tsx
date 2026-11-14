@@ -37,7 +37,7 @@ export function AppSidebar({
           'transition-[width] duration-300 ease-in-out z-30 shrink-0 select-none',
           // Desktop sizing
           'hidden lg:flex flex-col h-full',
-          isCollapsed ? 'w-[76px]' : 'w-[270px]',
+          isCollapsed ? 'w-[76px]' : 'w-[280px]',
           // Mobile drawer
           isMobileOpen &&
             'fixed inset-y-0 left-0 w-[285px] flex p-3 lg:p-0 z-50',
@@ -52,19 +52,28 @@ export function AppSidebar({
             'rounded-3xl p-3 sm:p-3.5 shadow-xs transition-colors duration-200'
           )}
         >
-          <SidebarHeader
-            isCollapsed={isMobileOpen ? false : isCollapsed}
-            onToggleCollapse={toggleCollapse}
-            isMobile={isMobileOpen}
-            onCloseMobile={onCloseMobile}
-          />
+          {/* Header - Fixed top */}
+          <div className="shrink-0">
+            <SidebarHeader
+              isCollapsed={isMobileOpen ? false : isCollapsed}
+              onToggleCollapse={toggleCollapse}
+              isMobile={isMobileOpen}
+              onCloseMobile={onCloseMobile}
+            />
+          </div>
 
-          <SidebarNavigation
-            isCollapsed={isMobileOpen ? false : isCollapsed}
-            onItemClick={isMobileOpen ? onCloseMobile : undefined}
-          />
+          {/* Navigation - Scrollable middle with ultra-clean transparent scrollbar */}
+          <div className="flex-1 min-h-0 sidebar-scroll my-1">
+            <SidebarNavigation
+              isCollapsed={isMobileOpen ? false : isCollapsed}
+              onItemClick={isMobileOpen ? onCloseMobile : undefined}
+            />
+          </div>
 
-          <SidebarFooter isCollapsed={isMobileOpen ? false : isCollapsed} />
+          {/* Footer - Fixed bottom (Mandi Sync Active) */}
+          <div className="shrink-0">
+            <SidebarFooter isCollapsed={isMobileOpen ? false : isCollapsed} />
+          </div>
         </div>
       </aside>
     </>

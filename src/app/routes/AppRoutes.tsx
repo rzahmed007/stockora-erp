@@ -28,21 +28,35 @@ export function AppRoutes() {
 
       {/* Main Application Routes (Unified ERP Layout with Sidebar and Floating Header) */}
       <Route element={<AppLayout />}>
+        {/* Core Management */}
         <Route path="/dashboard" element={<DashboardPage />} />
-
-        {/* Navigation placeholder routes for full sidebar integration */}
-        <Route path="/inventory/*" element={<ModulePlaceholder />} />
-        <Route path="/wholesale-sales/*" element={<ModulePlaceholder />} />
         <Route path="/retail-pos" element={<ModulePlaceholder />} />
-        <Route path="/purchases/*" element={<ModulePlaceholder />} />
-        <Route path="/customers/*" element={<ModulePlaceholder />} />
-        <Route path="/customer-credit" element={<ModulePlaceholder />} />
-        <Route path="/suppliers" element={<ModulePlaceholder />} />
         <Route path="/locations/*" element={<ModulePlaceholder />} />
-        <Route path="/daily-closing" element={<ModulePlaceholder />} />
+        <Route path="/products/*" element={<ModulePlaceholder />} />
+
+        {/* Operations & Modules */}
+        <Route path="/inventory/*" element={<ModulePlaceholder />} />
+        <Route path="/purchases/*" element={<ModulePlaceholder />} />
+        <Route path="/wholesale-sales/*" element={<ModulePlaceholder />} />
+        <Route path="/customers/*" element={<ModulePlaceholder />} />
+        <Route path="/transport/*" element={<ModulePlaceholder />} />
+        <Route path="/labour/*" element={<ModulePlaceholder />} />
+        <Route path="/employees/*" element={<ModulePlaceholder />} />
+
+        {/* Finance & Reporting */}
+        <Route path="/customer-credit/*" element={<ModulePlaceholder />} />
+        <Route path="/accounting/*" element={<ModulePlaceholder />} />
+        <Route path="/daily-closing/*" element={<ModulePlaceholder />} />
+        <Route path="/expenses/*" element={<ModulePlaceholder />} />
         <Route path="/reports/*" element={<ModulePlaceholder />} />
+
+        {/* System */}
+        <Route path="/notifications/*" element={<ModulePlaceholder />} />
+        <Route path="/users/*" element={<ModulePlaceholder />} />
         <Route path="/settings/*" element={<ModulePlaceholder />} />
-        <Route path="/notifications" element={<ModulePlaceholder />} />
+
+        {/* Backwards compatibility */}
+        <Route path="/suppliers" element={<ModulePlaceholder />} />
       </Route>
 
       {/* Catch-all fallback */}

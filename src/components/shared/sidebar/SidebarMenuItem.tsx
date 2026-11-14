@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { NavLink, useLocation, Link } from 'react-router-dom';
 import { Plus, Minus, Folder, ChevronRight } from 'lucide-react';
 import { SidebarNavItem } from './sidebar.config';
@@ -7,12 +6,16 @@ import { cn } from '@/lib/utils';
 interface SidebarMenuItemProps {
   item: SidebarNavItem;
   isCollapsed: boolean;
+  isOpen?: boolean;
+  onToggle?: () => void;
   onItemClick?: () => void;
 }
 
 export function SidebarMenuItem({
   item,
   isCollapsed,
+  isOpen = false,
+  onToggle,
   onItemClick,
 }: SidebarMenuItemProps) {
   const location = useLocation();
@@ -26,16 +29,6 @@ export function SidebarMenuItem({
         (child.href !== '/' && location.pathname.startsWith(child.href))
     )
   );
-
-  // Keep open if child is active or user clicked open
-  const [isOpen, setIsOpen] = useState(isChildActive || false);
-
-  // Auto-expand if user navigates to a child route
-  React.useEffect(() => {
-    if (isChildActive) {
-      setIsOpen(true);
-    }
-  }, [isChildActive]);
 
   const Icon = item.icon;
 
@@ -59,9 +52,9 @@ export function SidebarMenuItem({
           <Icon className="h-5 w-5" />
         </NavLink>
 
-        {/* Hover Popover Flyout Menu (Smooth transition, shows children if any) */}
+        {/* Hover Popover Flyout Menu */}
         <div className="absolute left-full ml-3 top-0 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 ease-out z-50">
-          <div className="w-52 p-2.5 rounded-2xl bg-white dark:bg-gray-900 border border-[#E5E7EB] dark:border-gray-800 shadow-xl text-left space-y-1">
+          <div className="w-56 p-2.5 rounded-2xl bg-white dark:bg-gray-900 border border-[#E5E7EB] dark:border-gray-800 shadow-xl text-left space-y-1">
             {/* Popover Header */}
             <div className="px-2 py-1.5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
               <span className="text-xs font-bold text-[#1D1B1A] dark:text-white">
@@ -116,37 +109,41 @@ export function SidebarMenuItem({
   return (
     <div className="space-y-1">
       {hasChildren ? (
-        // Expandable parent button
+        // Expandable parent button - Single accordion toggle
         <button
           type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={onToggle}
           className={cn(
             'w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 select-none group',
-            isOpen || isChildActive
-              ? 'bg-[#1D1B1A] dark:bg-white text-white dark:text-[#1D1B1A] shadow-sm'
+            isChildActive
+              ? 'bg-[#003A41] text-white shadow-sm font-semibold'
+              : isOpen
+              ? 'bg-[#1D1B1A] dark:bg-white text-white dark:text-[#1D1B1A] shadow-sm font-semibold'
               : 'text-[#1D1B1A] dark:text-gray-200 hover:bg-white dark:hover:bg-gray-800'
           )}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Icon
               className={cn(
-                'h-5 w-5 transition-transform duration-200 group-hover:scale-105',
-                isOpen || isChildActive
+                'h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105',
+                isChildActive || isOpen
                   ? 'text-white dark:text-[#1D1B1A]'
                   : 'text-[#6B7280] dark:text-gray-400'
               )}
             />
-            <span className="font-semibold text-sm tracking-tight">
+            <span className="font-semibold text-sm tracking-tight whitespace-nowrap truncate">
               {item.title}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 shrink-0 ml-1">
             {item.badge && (
               <span
                 className={cn(
-                  'text-[10px] font-bold px-2 py-0.5 rounded-full',
-                  isOpen || isChildActive
+                  'text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0',
+                  isChildActive
+                    ? 'bg-white/20 text-white'
+                    : isOpen
                     ? 'bg-white/20 text-white dark:bg-black/10 dark:text-[#1D1B1A]'
                     : 'bg-[#003A41] text-white'
                 )}
@@ -157,7 +154,7 @@ export function SidebarMenuItem({
 
             <span
               className={cn(
-                'h-5 w-5 rounded-md flex items-center justify-center transition-transform duration-200',
+                'h-5 w-5 rounded-md flex items-center justify-center transition-transform duration-200 shrink-0',
                 isOpen && 'rotate-180'
               )}
             >
@@ -170,7 +167,7 @@ export function SidebarMenuItem({
           </div>
         </button>
       ) : (
-        // Single link item
+        // Single link item - preserves dark teal active color (#003A41)
         <NavLink
           to={item.href}
           onClick={onItemClick}
@@ -185,22 +182,24 @@ export function SidebarMenuItem({
         >
           {({ isActive: navActive }) => (
             <>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
                 <Icon
                   className={cn(
-                    'h-5 w-5 transition-transform duration-200 group-hover:scale-105',
+                    'h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105',
                     navActive
                       ? 'text-white'
                       : 'text-[#6B7280] dark:text-gray-400'
                   )}
                 />
-                <span className="tracking-tight">{item.title}</span>
+                <span className="font-semibold text-sm tracking-tight whitespace-nowrap truncate">
+                  {item.title}
+                </span>
               </div>
 
               {item.badge && (
                 <span
                   className={cn(
-                    'text-[10px] font-bold px-2 py-0.5 rounded-full',
+                    'text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1',
                     navActive
                       ? 'bg-white/20 text-white'
                       : 'bg-[#1D1B1A] text-white dark:bg-gray-700'
@@ -214,7 +213,7 @@ export function SidebarMenuItem({
         </NavLink>
       )}
 
-      {/* Accordion Animation for Submenu Items */}
+      {/* Accordion Animation for Submenu Items (60FPS grid height transition) */}
       {hasChildren && (
         <div
           className={cn(
@@ -247,17 +246,17 @@ export function SidebarMenuItem({
                       className={cn(
                         'flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150',
                         isSubActive
-                          ? 'bg-white dark:bg-gray-800 text-[#1D1B1A] dark:text-white shadow-xs font-semibold'
+                          ? 'bg-white dark:bg-gray-800 text-[#003A41] dark:text-[#58AFB7] shadow-xs font-bold ring-1 ring-[#003A41]/20'
                           : 'text-[#6B7280] dark:text-gray-400 hover:text-[#1D1B1A] dark:hover:text-white hover:bg-white/60 dark:hover:bg-gray-800/60'
                       )}
                     >
-                      <div className="flex items-center gap-2">
-                        <Folder className="h-3.5 w-3.5 text-[#6B7280] dark:text-gray-400" />
-                        <span>{subItem.title}</span>
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                        <Folder className="h-3.5 w-3.5 shrink-0 text-[#6B7280] dark:text-gray-400" />
+                        <span className="whitespace-nowrap truncate">{subItem.title}</span>
                       </div>
 
                       {subItem.badge && (
-                        <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-gray-200 dark:bg-gray-700 text-[#1D1B1A] dark:text-white">
+                        <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-gray-200 dark:bg-gray-700 text-[#1D1B1A] dark:text-white shrink-0 ml-1">
                           {subItem.badge}
                         </span>
                       )}
