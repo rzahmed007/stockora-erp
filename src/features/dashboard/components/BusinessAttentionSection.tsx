@@ -148,3 +148,4 @@ export function BusinessAttentionSection({ alerts }: BusinessAttentionSectionPro
     </div>
   );
 }
+

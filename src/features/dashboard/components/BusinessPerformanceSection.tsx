@@ -116,3 +116,4 @@ export function BusinessPerformanceSection({ kpis }: BusinessPerformanceSectionP
     </div>
   );
 }
+
