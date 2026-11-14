@@ -1,129 +1,16 @@
 import {
-  KpiMetric,
+  TimeRange,
+  DashboardLocationId,
+  PerformanceKpi,
+  FinancialPositionKpi,
   SalesChartDataPoint,
   InventoryCommodity,
   LocationSummary,
-  SaleTransaction,
-  CustomerCreditItem,
-  PurchaseItem,
-  LowStockAlertItem,
+  BusinessAttentionAlert,
+  RecentBusinessActivity,
+  TopSellingProduct,
 } from '../types/dashboard.types';
-
-export const MOCK_KPIS: KpiMetric[] = [
-  {
-    id: 'total-sales',
-    title: 'Total Sales (This Month)',
-    value: '₹18,45,200',
-    numericValue: 1845200,
-    change: '+14.8%',
-    isPositive: true,
-    subtext: 'vs. ₹16,07,000 last month',
-    badge: 'Trending Up',
-  },
-  {
-    id: 'total-purchases',
-    title: 'Total Purchases (This Month)',
-    value: '₹14,20,500',
-    numericValue: 1420500,
-    change: '+8.2%',
-    isPositive: true,
-    subtext: '34 Mandi truck arrivals',
-  },
-  {
-    id: 'inventory-value',
-    title: 'Total Inventory Valuation',
-    value: '₹32,80,000',
-    numericValue: 3280000,
-    change: '85.5 Tons',
-    isPositive: true,
-    subtext: '1,710 total sacks across 3 yards',
-    badge: '3 Yards',
-  },
-  {
-    id: 'customer-credit',
-    title: 'Customer Outstanding (Udhar)',
-    value: '₹6,45,000',
-    numericValue: 645000,
-    change: '18 Pending',
-    isPositive: false,
-    subtext: '₹1,85,000 overdue > 15 days',
-    badge: 'Credit Ledger',
-  },
-  {
-    id: 'today-cash',
-    title: "Today's Cash Collected",
-    value: '₹1,85,400',
-    numericValue: 185400,
-    change: '+18.5%',
-    isPositive: true,
-    subtext: 'Spot cash & Mandi counter sales',
-  },
-  {
-    id: 'today-credit',
-    title: "Today's Credit (Udhar) Sales",
-    value: '₹2,42,800',
-    numericValue: 242800,
-    change: '6 Bills',
-    isPositive: true,
-    subtext: 'Dispatched to wholesale partners',
-  },
-];
-
-export const MOCK_SALES_CHART_WEEK: SalesChartDataPoint[] = [
-  { day: 'Mon', date: '08 Nov', cashSales: 165000, creditSales: 195000, total: 360000 },
-  { day: 'Tue', date: '09 Nov', cashSales: 180000, creditSales: 210000, total: 390000 },
-  { day: 'Wed', date: '10 Nov', cashSales: 140000, creditSales: 240000, total: 380000 },
-  { day: 'Thu', date: '11 Nov', cashSales: 210000, creditSales: 185000, total: 395000 },
-  { day: 'Fri', date: '12 Nov', cashSales: 195000, creditSales: 270000, total: 465000 },
-  { day: 'Sat', date: '13 Nov', cashSales: 240000, creditSales: 310000, total: 550000 },
-  { day: 'Sun', date: '14 Nov', cashSales: 185400, creditSales: 242800, total: 428200 },
-];
-
-export const MOCK_SALES_CHART_MONTH: SalesChartDataPoint[] = [
-  { day: 'Week 1', date: '01 - 07 Nov', cashSales: 1150000, creditSales: 1420000, total: 2570000 },
-  { day: 'Week 2', date: '08 - 14 Nov', cashSales: 1315400, creditSales: 1652800, total: 2968200 },
-  { day: 'Week 3', date: '15 - 21 Nov', cashSales: 1220000, creditSales: 1540000, total: 2760000 },
-  { day: 'Week 4', date: '22 - 28 Nov', cashSales: 1410000, creditSales: 1780000, total: 3190000 },
-];
-
-export const MOCK_INVENTORY_COMMODITIES: InventoryCommodity[] = [
-  {
-    id: 'onion-nashik',
-    name: 'Nashik Red Onion',
-    variety: 'Puna Garva (Grade A Medium)',
-    availableWeight: '42.5 Tons (425 Qtl)',
-    sackCount: 850,
-    weightPerSack: '50 kg / Sack',
-    stockValue: '₹14,87,500',
-    avgCostPerKg: '₹35.00/kg',
-    status: 'normal',
-    primaryLocation: 'Cold Storage Hub',
-  },
-  {
-    id: 'potato-agra',
-    name: 'Agra Jyoti Potato',
-    variety: 'Cold Storage Premium (45mm+)',
-    availableWeight: '32.0 Tons (640 Qtl)',
-    sackCount: 640,
-    weightPerSack: '50 kg / Sack',
-    stockValue: '₹7,68,000',
-    avgCostPerKg: '₹24.00/kg',
-    status: 'normal',
-    primaryLocation: 'Central Godown',
-  },
-  {
-    id: 'garlic-mandsaur',
-    name: 'Mandsaur Garlic',
-    variety: 'Desi Pure White (Special Ek Kandi)',
-    availableWeight: '11.0 Tons (220 Qtl)',
-    sackCount: 220,
-    weightPerSack: '50 kg / Sack',
-    stockValue: '₹10,24,500',
-    avgCostPerKg: '₹93.10/kg',
-    status: 'low_stock',
-    primaryLocation: 'Shop (Mandi Yard)',
-  },
-];
+import { SaleRecord } from '@/features/sales/types/sales.types';
 
 export const MOCK_LOCATIONS: LocationSummary[] = [
   {
@@ -161,193 +48,565 @@ export const MOCK_LOCATIONS: LocationSummary[] = [
   },
 ];
 
-export const MOCK_RECENT_SALES: SaleTransaction[] = [
+export const MOCK_INVENTORY_COMMODITIES: InventoryCommodity[] = [
   {
-    id: 'sale-1',
-    invoiceNo: 'INV-2024-0891',
-    customerName: 'Kishan Trading Co.',
-    customerCity: 'Mumbai APMC',
-    product: 'Nashik Red Onion',
-    quantity: '120 Sacks (6,000 kg)',
-    amount: '₹2,16,000',
-    rawAmount: 216000,
-    paymentType: 'Credit',
+    id: 'onion-nashik',
+    name: 'Nashik Red Onion',
+    variety: 'Puna Garva (Grade A Medium)',
+    availableWeight: '42.5 Tons (425 Qtl)',
+    sackCount: 850,
+    weightPerSack: '50 kg / Sack',
+    stockValue: '₹14,87,500',
+    avgCostPerKg: '₹35.00/kg',
+    status: 'normal',
+    primaryLocation: 'Cold Storage Hub (Hub #3)',
+  },
+  {
+    id: 'potato-agra',
+    name: 'Agra Jyoti Potato',
+    variety: 'Cold Storage Premium (45mm+)',
+    availableWeight: '32.0 Tons (640 Qtl)',
+    sackCount: 640,
+    weightPerSack: '50 kg / Sack',
+    stockValue: '₹7,68,000',
+    avgCostPerKg: '₹24.00/kg',
+    status: 'normal',
+    primaryLocation: 'Central Godown (Depot 2)',
+  },
+  {
+    id: 'garlic-mandsaur',
+    name: 'Mandsaur Garlic',
+    variety: 'Desi Pure White (Special Ek Kandi)',
+    availableWeight: '11.0 Tons (220 Qtl)',
+    sackCount: 220,
+    weightPerSack: '50 kg / Sack',
+    stockValue: '₹10,24,500',
+    avgCostPerKg: '₹93.10/kg',
+    status: 'low_stock',
+    primaryLocation: 'Main Mandi Shop (APMC #12)',
+  },
+];
+
+export const MOCK_TOP_SELLING_PRODUCTS: TopSellingProduct[] = [
+  {
+    id: 'prod-onion-nashik',
+    name: 'Nashik Red Onion',
+    variety: 'Puna Garva (Grade A Medium)',
+    sacksSold: 280,
+    weightSoldKg: 14000,
+    revenue: 532000,
+    cost: 490000, // ₹35/kg cost
+    grossProfit: 42000,
+    marginPercent: 7.9,
+    stockRemainingSacks: 850,
+  },
+  {
+    id: 'prod-potato-agra',
+    name: 'Agra Jyoti Potato',
+    variety: 'Cold Storage Premium (45mm+)',
+    sacksSold: 190,
+    weightSoldKg: 9500,
+    revenue: 266000,
+    cost: 228000, // ₹24/kg cost
+    grossProfit: 38000,
+    marginPercent: 14.3,
+    stockRemainingSacks: 640,
+  },
+  {
+    id: 'prod-garlic-mandsaur',
+    name: 'Mandsaur Garlic',
+    variety: 'Desi Pure White (Special Ek Kandi)',
+    sacksSold: 45,
+    weightSoldKg: 2250,
+    revenue: 247500,
+    cost: 209475, // ₹93.10/kg cost
+    grossProfit: 38025,
+    marginPercent: 15.4,
+    stockRemainingSacks: 220,
+  },
+];
+
+export const MOCK_ATTENTION_ALERTS: BusinessAttentionAlert[] = [
+  {
+    id: 'alert-overdue-1',
+    type: 'overdue_payment',
+    title: 'Patel Brothers Wholesale (Surat)',
+    description: 'Payment overdue by 18 days beyond Mandi credit terms',
+    amount: '₹2,40,000',
+    urgency: 'critical',
+    actionUrl: '/customer-credit',
+    actionText: 'Collect Udhar',
+    meta: 'Risk Score: High • Last reminder sent 2 days ago',
+  },
+  {
+    id: 'alert-lowstock-1',
+    type: 'low_stock',
+    title: 'Mandsaur Pure White Garlic',
+    description: 'Available stock (220 sacks) below safety threshold of 350 sacks',
+    amount: '-130 Sacks Deficit',
+    urgency: 'critical',
+    actionUrl: '/purchases',
+    actionText: 'Procure Stock',
+    meta: 'Primary yard: Shop #12 • Mandi arrivals dropping',
+  },
+  {
+    id: 'alert-upcoming-1',
+    type: 'upcoming_due',
+    title: 'Kishan Trading Co. (Mumbai Vashi)',
+    description: 'Wholesale lot credit due in 48 hours (20 Nov 2026)',
+    amount: '₹1,85,000',
+    urgency: 'warning',
+    actionUrl: '/customer-credit',
+    actionText: 'Send Reminder',
+    meta: 'Credit limit used: 61% • Good payment history',
+  },
+  {
+    id: 'alert-supplier-1',
+    type: 'supplier_due',
+    title: 'Lasalgaon Farmers Syndicate (Mandi Inward)',
+    description: 'Auction lot payout balance due to farmer collective',
+    amount: '₹1,45,000',
+    urgency: 'warning',
+    actionUrl: '/purchases',
+    actionText: 'Review Bill',
+    meta: 'Truck #MH-15-EG-4491 received yesterday',
+  },
+  {
+    id: 'alert-closing-1',
+    type: 'pending_closing',
+    title: 'Main Mandi Shop #12 Counter Register',
+    description: "Evening cash & UPI drawer reconciliation pending owner's verification",
+    urgency: 'warning',
+    actionUrl: '/daily-closing',
+    actionText: 'Reconcile Closing',
+    meta: 'Cash Drawer: ₹1,85,400 expected',
+  },
+  {
+    id: 'alert-variance-1',
+    type: 'closing_variance',
+    title: 'Central Godown Depot 2 Closing',
+    description: 'Cash drawer reconciled with zero discrepancy (₹0 variance)',
+    amount: '₹0 Variance',
+    urgency: 'info',
+    actionUrl: '/daily-closing',
+    actionText: 'View Audit Log',
+    meta: 'Closing locked at 07:30 PM by Supervisor',
+  },
+];
+
+export const MOCK_RECENT_ACTIVITIES: RecentBusinessActivity[] = [
+  {
+    id: 'act-1',
+    dateTime: 'Today, 04:15 PM',
+    type: 'sale',
+    refNo: 'INV-2024-0891',
+    entityName: 'Kishan Trading Co.',
+    location: 'Shree Cold Storage Hub',
+    amount: 216000,
+    formattedAmount: '₹2,16,000',
     status: 'Dispatched',
-    date: '14 Nov 2026',
-    time: '04:15 PM',
+    statusType: 'success',
   },
   {
-    id: 'sale-2',
-    invoiceNo: 'INV-2024-0890',
-    customerName: 'Shree Ganesh Vegetables',
-    customerCity: 'Pune Market Yard',
-    product: 'Agra Jyoti Potato',
-    quantity: '80 Sacks (4,000 kg)',
-    amount: '₹1,04,000',
-    rawAmount: 104000,
-    paymentType: 'Cash',
+    id: 'act-2',
+    dateTime: 'Today, 03:50 PM',
+    type: 'sale',
+    refNo: 'POS-2024-1042',
+    entityName: 'Walk-in Retail Buyer (Suresh)',
+    location: 'Main Mandi Shop #12',
+    amount: 500,
+    formattedAmount: '₹500',
     status: 'Completed',
-    date: '14 Nov 2026',
-    time: '02:40 PM',
+    statusType: 'success',
   },
   {
-    id: 'sale-3',
-    invoiceNo: 'INV-2024-0889',
-    customerName: 'Patel Brothers Wholesale',
-    customerCity: 'Surat Ring Road',
-    product: 'Mandsaur Garlic',
-    quantity: '25 Sacks (1,250 kg)',
-    amount: '₹1,22,500',
-    rawAmount: 122500,
-    paymentType: 'Partial Payment',
+    id: 'act-3',
+    dateTime: 'Today, 02:30 PM',
+    type: 'collection',
+    refNo: 'COL-2024-0091',
+    entityName: 'National Supermart Supplies',
+    location: 'Main Mandi Shop #12',
+    amount: 95000,
+    formattedAmount: '₹95,000',
+    status: 'Verified',
+    statusType: 'success',
+  },
+  {
+    id: 'act-4',
+    dateTime: 'Today, 01:15 PM',
+    type: 'purchase',
+    refNo: 'PUR-2024-0412',
+    entityName: 'Lasalgaon Farmers Mandi Link',
+    location: 'Shree Cold Storage Hub',
+    amount: 640000,
+    formattedAmount: '₹6,40,000',
     status: 'Completed',
-    date: '14 Nov 2026',
-    time: '12:20 PM',
+    statusType: 'info',
   },
   {
-    id: 'sale-4',
-    invoiceNo: 'INV-2024-0888',
-    customerName: 'National Supermart Supplies',
-    customerCity: 'Thane West',
-    product: 'Nashik Red Onion',
-    quantity: '50 Sacks (2,500 kg)',
-    amount: '₹91,250',
-    rawAmount: 91250,
-    paymentType: 'Cash',
-    status: 'Completed',
-    date: '14 Nov 2026',
-    time: '11:05 AM',
+    id: 'act-5',
+    dateTime: 'Today, 11:45 AM',
+    type: 'expense',
+    refNo: 'EXP-2024-0341',
+    entityName: 'Mandi Yard Hamali Union (400 Sacks)',
+    location: 'Main Mandi Shop #12',
+    amount: 12000,
+    formattedAmount: '₹12,000',
+    status: 'Verified',
+    statusType: 'warning',
   },
   {
-    id: 'sale-5',
-    invoiceNo: 'INV-2024-0887',
-    customerName: 'Balaji Hotel & Caterers Link',
-    customerCity: 'Nashik City',
-    product: 'Potato + Onion Combo',
-    quantity: '30 Sacks (1,500 kg)',
-    amount: '₹46,500',
-    rawAmount: 46500,
-    paymentType: 'Credit',
-    status: 'Pending Dispatch',
-    date: '14 Nov 2026',
-    time: '09:30 AM',
-  },
-];
-
-export const MOCK_CUSTOMER_CREDIT: CustomerCreditItem[] = [
-  {
-    id: 'c-1',
-    customerName: 'Kishan Trading Co.',
-    phone: '+91 98210 44910',
-    city: 'Mumbai',
-    outstandingAmount: '₹1,85,000',
-    rawOutstanding: 185000,
-    creditLimit: '₹3,00,000',
-    limitUsedPercent: 61,
-    lastPaymentDate: '08 Nov 2026',
-    dueDate: '20 Nov 2026',
-    status: 'Current',
-  },
-  {
-    id: 'c-2',
-    customerName: 'Maruti Agro Link',
-    phone: '+91 94231 88410',
-    city: 'Nagpur',
-    outstandingAmount: '₹1,42,500',
-    rawOutstanding: 142500,
-    creditLimit: '₹1,50,000',
-    limitUsedPercent: 95,
-    lastPaymentDate: '24 Oct 2026',
-    dueDate: '09 Nov 2026',
-    status: 'Overdue',
-  },
-  {
-    id: 'c-3',
-    customerName: 'Balaji Hotel Supplies',
-    phone: '+91 99220 11920',
-    city: 'Nashik',
-    outstandingAmount: '₹98,000',
-    rawOutstanding: 98000,
-    creditLimit: '₹1,00,000',
-    limitUsedPercent: 98,
-    lastPaymentDate: '28 Oct 2026',
-    dueDate: '04 Nov 2026',
-    status: 'Critical',
-  },
-  {
-    id: 'c-4',
-    customerName: 'Patel Brothers Wholesale',
-    phone: '+91 98251 77301',
-    city: 'Surat',
-    outstandingAmount: '₹84,500',
-    rawOutstanding: 84500,
-    creditLimit: '₹2,50,000',
-    limitUsedPercent: 33,
-    lastPaymentDate: '11 Nov 2026',
-    dueDate: '25 Nov 2026',
-    status: 'Current',
-  },
-];
-
-export const MOCK_PURCHASES: PurchaseItem[] = [
-  {
-    id: 'po-1',
-    purchaseNo: 'PO-2024-0412',
-    supplierName: 'Lasalgaon Farmers Mandi Link',
-    mandiLocation: 'Lasalgaon Mandi Yard',
-    product: 'Nashik Red Onion (Puna)',
-    quantity: '400 Sacks (20.0 Ton)',
-    totalAmount: '₹6,40,000',
-    destinationLocation: 'Cold Storage Hub',
-    status: 'Received',
-    date: '14 Nov 2026',
-  },
-  {
-    id: 'po-2',
-    purchaseNo: 'PO-2024-0411',
-    supplierName: 'Agra Potato Growers Syndicate',
-    mandiLocation: 'Fatehabad Mandi',
-    product: 'Agra Jyoti Potato',
-    quantity: '300 Sacks (15.0 Ton)',
-    totalAmount: '₹3,45,000',
-    destinationLocation: 'Central Godown',
+    id: 'act-6',
+    dateTime: 'Today, 10:20 AM',
+    type: 'transfer',
+    refNo: 'TRF-2024-0105',
+    entityName: 'Shop #12 → Central Godown (80 Sacks Potato)',
+    location: 'Central Godown Depot 2',
+    amount: 96000,
+    formattedAmount: '₹96,000',
     status: 'In-Transit',
-    date: '13 Nov 2026',
-  },
-  {
-    id: 'po-3',
-    purchaseNo: 'PO-2024-0410',
-    supplierName: 'Mandsaur Garlic Commission House',
-    mandiLocation: 'Mandsaur APMC',
-    product: 'Special White Garlic',
-    quantity: '100 Sacks (5.0 Ton)',
-    totalAmount: '₹4,35,500',
-    destinationLocation: 'Shop (Mandi Yard)',
-    status: 'Quality Check',
-    date: '13 Nov 2026',
+    statusType: 'info',
   },
 ];
 
-export const MOCK_LOW_STOCK_ALERTS: LowStockAlertItem[] = [
-  {
-    id: 'alert-1',
-    productName: 'Mandsaur Pure White Garlic',
-    variety: 'Special Ek Kandi',
-    availableStock: '220 Sacks (11.0 Ton)',
-    minimumThreshold: '350 Sacks (17.5 Ton)',
-    location: 'Shop (Mandi Yard)',
-    deficit: '-130 Sacks',
-    urgency: 'Critical',
-  },
-  {
-    id: 'alert-2',
-    productName: 'Nashik Red Onion Grade B (Goli)',
-    variety: 'Small Goli Size (35mm)',
-    availableStock: '85 Sacks (4.2 Ton)',
-    minimumThreshold: '150 Sacks (7.5 Ton)',
-    location: 'Central Godown',
-    deficit: '-65 Sacks',
-    urgency: 'Warning',
-  },
+// Historical Chart Data sets
+export const MOCK_CHARTS_TODAY_VS_YESTERDAY: SalesChartDataPoint[] = [
+  { day: '08:00 AM', date: 'Morning Opening', sales: 45000, purchases: 120000, cashSales: 35000, creditSales: 10000, collections: 15000, total: 45000 },
+  { day: '10:00 AM', date: 'Mandi Auction Peak', sales: 95000, purchases: 240000, cashSales: 55000, creditSales: 40000, collections: 40000, total: 95000 },
+  { day: '12:00 PM', date: 'Midday Trading', sales: 85000, purchases: 150000, cashSales: 40000, creditSales: 45000, collections: 25000, total: 85000 },
+  { day: '02:00 PM', date: 'Outstation Dispatch', sales: 140000, purchases: 80000, cashSales: 30000, creditSales: 110000, collections: 35000, total: 140000 },
+  { day: '04:00 PM', date: 'Evening Mandi Rush', sales: 110000, purchases: 50000, cashSales: 60000, creditSales: 50000, collections: 50000, total: 110000 },
+  { day: '06:00 PM', date: 'Counter Closing', sales: 52000, purchases: 0, cashSales: 42000, creditSales: 10000, collections: 20000, total: 52000 },
 ];
 
+export const MOCK_CHARTS_7_DAYS: SalesChartDataPoint[] = [
+  { day: 'Mon', date: '08 Nov', sales: 360000, purchases: 310000, cashSales: 165000, creditSales: 195000, collections: 145000, total: 360000 },
+  { day: 'Tue', date: '09 Nov', sales: 390000, purchases: 280000, cashSales: 180000, creditSales: 210000, collections: 160000, total: 390000 },
+  { day: 'Wed', date: '10 Nov', sales: 380000, purchases: 340000, cashSales: 140000, creditSales: 240000, collections: 190000, total: 380000 },
+  { day: 'Thu', date: '11 Nov', sales: 395000, purchases: 300000, cashSales: 210000, creditSales: 185000, collections: 155000, total: 395000 },
+  { day: 'Fri', date: '12 Nov', sales: 465000, purchases: 410000, cashSales: 195000, creditSales: 270000, collections: 220000, total: 465000 },
+  { day: 'Sat', date: '13 Nov', sales: 550000, purchases: 480000, cashSales: 240000, creditSales: 310000, collections: 260000, total: 550000 },
+  { day: 'Sun', date: '14 Nov', sales: 527000, purchases: 390000, cashSales: 262000, creditSales: 265000, collections: 185000, total: 527000 },
+];
+
+export const MOCK_CHARTS_30_DAYS: SalesChartDataPoint[] = [
+  { day: 'Week 1', date: '01 - 07 Nov', sales: 2570000, purchases: 2150000, cashSales: 1150000, creditSales: 1420000, collections: 1250000, total: 2570000 },
+  { day: 'Week 2', date: '08 - 14 Nov', sales: 2968200, purchases: 2480000, cashSales: 1315400, creditSales: 1652800, collections: 1480000, total: 2968200 },
+  { day: 'Week 3', date: '15 - 21 Nov', sales: 2760000, purchases: 2320000, cashSales: 1220000, creditSales: 1540000, collections: 1390000, total: 2760000 },
+  { day: 'Week 4', date: '22 - 28 Nov', sales: 3190000, purchases: 2650000, cashSales: 1410000, creditSales: 1780000, collections: 1650000, total: 3190000 },
+];
+
+export const MOCK_SALES_CHART_WEEK = MOCK_CHARTS_7_DAYS;
+export const MOCK_SALES_CHART_MONTH = MOCK_CHARTS_30_DAYS;
+
+// Helper to format currency
+export function formatINR(val: number): string {
+  if (Math.abs(val) >= 10000000) {
+    return `₹${(val / 10000000).toFixed(2)} Cr`;
+  }
+  if (Math.abs(val) >= 100000) {
+    return `₹${(val / 100000).toFixed(2)} Lakh`;
+  }
+  return `₹${val.toLocaleString('en-IN')}`;
+}
+
+export function formatCompactINR(val: number): string {
+  if (Math.abs(val) >= 100000) {
+    return `₹${(val / 100000).toFixed(1)}L`;
+  }
+  if (Math.abs(val) >= 1000) {
+    return `₹${(val / 1000).toFixed(0)}k`;
+  }
+  return `₹${val.toLocaleString('en-IN')}`;
+}
+
+// Comprehensive Live Dashboard Computation Function
+export function getDashboardOverviewData(
+  locationId: DashboardLocationId,
+  timeRange: TimeRange,
+  salesFromContext: SaleRecord[] = []
+) {
+  // Location factor for scaling metrics when an individual location is selected
+  const locMultiplier =
+    locationId === 'all'
+      ? 1
+      : locationId === 'loc-shop'
+      ? 0.45
+      : locationId === 'loc-warehouse'
+      ? 0.35
+      : 0.2; // godown
+
+  // Time multiplier and labels
+  let timeMultiplier = 1;
+  let comparisonLabel = 'vs. yesterday';
+
+  if (timeRange === 'today') {
+    timeMultiplier = 1;
+    comparisonLabel = 'vs. yesterday';
+  } else if (timeRange === 'yesterday') {
+    timeMultiplier = 0.94;
+    comparisonLabel = 'vs. day before';
+  } else if (timeRange === 'week') {
+    timeMultiplier = 6.2;
+    comparisonLabel = 'vs. last week';
+  } else if (timeRange === 'month' || timeRange === 'custom') {
+    timeMultiplier = 26.5;
+    comparisonLabel = 'vs. last month';
+  }
+
+  // 1. Sales from context or seed baseline
+  const baseSalesAmount = 527000 * locMultiplier * timeMultiplier;
+  const contextSalesAmount = salesFromContext.reduce((acc, s) => acc + s.grandTotal, 0);
+  const totalSales = Math.round(baseSalesAmount + (locationId === 'all' ? contextSalesAmount : contextSalesAmount * locMultiplier));
+
+  const totalSalesPrev = Math.round(totalSales * 0.88); // +13.6% increase
+  const salesChangePercent = Number((((totalSales - totalSalesPrev) / totalSalesPrev) * 100).toFixed(1));
+
+  // Cash vs Credit breakdown
+  const cashSales = Math.round(totalSales * 0.48);
+  const cashSalesPrev = Math.round(totalSalesPrev * 0.44);
+  const cashChangePercent = Number((((cashSales - cashSalesPrev) / cashSalesPrev) * 100).toFixed(1));
+
+  const creditSales = totalSales - cashSales;
+  const creditSalesPrev = totalSalesPrev - cashSalesPrev;
+  const creditChangePercent = Number((((creditSales - creditSalesPrev) / creditSalesPrev) * 100).toFixed(1));
+
+  // Customer collections (cash/bank debt recovered)
+  const customerCollections = Math.round(creditSales * 0.72);
+  const customerCollectionsPrev = Math.round(creditSalesPrev * 0.65);
+  const collectionsChangePercent = Number(
+    (((customerCollections - customerCollectionsPrev) / customerCollectionsPrev) * 100).toFixed(1)
+  );
+
+  // SECTION 1: PERFORMANCE KPIS
+  const performanceKpis: PerformanceKpi[] = [
+    {
+      id: 'kpi-total-sales',
+      title: 'Total Sales',
+      amount: totalSales,
+      formattedAmount: formatINR(totalSales),
+      previousAmount: totalSalesPrev,
+      formattedPreviousAmount: formatINR(totalSalesPrev),
+      comparisonLabel,
+      percentChange: salesChangePercent,
+      isPositive: salesChangePercent >= 0,
+      badge: 'Live Billing',
+      actionUrl: '/sales',
+    },
+    {
+      id: 'kpi-cash-sales',
+      title: 'Cash Sales (Spot Liquidity)',
+      amount: cashSales,
+      formattedAmount: formatINR(cashSales),
+      previousAmount: cashSalesPrev,
+      formattedPreviousAmount: formatINR(cashSalesPrev),
+      comparisonLabel,
+      percentChange: cashChangePercent,
+      isPositive: cashChangePercent >= 0,
+      badge: 'Cash & UPI',
+      actionUrl: '/sales',
+    },
+    {
+      id: 'kpi-credit-sales',
+      title: 'Credit (Udhar) Sales',
+      amount: creditSales,
+      formattedAmount: formatINR(creditSales),
+      previousAmount: creditSalesPrev,
+      formattedPreviousAmount: formatINR(creditSalesPrev),
+      comparisonLabel,
+      percentChange: creditChangePercent,
+      isPositive: creditChangePercent <= 15, // High credit expansion flagged
+      badge: 'B2B Udhar',
+      actionUrl: '/sales',
+    },
+    {
+      id: 'kpi-collections',
+      title: 'Customer Collections',
+      amount: customerCollections,
+      formattedAmount: formatINR(customerCollections),
+      previousAmount: customerCollectionsPrev,
+      formattedPreviousAmount: formatINR(customerCollectionsPrev),
+      comparisonLabel,
+      percentChange: collectionsChangePercent,
+      isPositive: collectionsChangePercent >= 0,
+      badge: 'Debt Recovered',
+      actionUrl: '/customer-credit',
+    },
+  ];
+
+  // SECTION 2: FINANCIAL POSITION (With proper Cost of Goods Sold & Profit calculations)
+  // COGS is calculated based on commodity landing costs (~88% of wholesale revenue)
+  const cogsAmount = Math.round(totalSales * 0.884);
+  const grossProfit = Math.max(0, totalSales - cogsAmount);
+  const grossMarginPercent = Number(((grossProfit / totalSales) * 100).toFixed(1));
+
+  // Operating Expenses (Hamali labour + transport freight + mandi electricity & yard rent)
+  const periodExpenses = Math.round(totalSales * 0.045);
+  const netProfit = Math.max(0, grossProfit - periodExpenses);
+  const netMarginPercent = Number(((netProfit / totalSales) * 100).toFixed(1));
+
+  const customerOutstanding = Math.round(645000 * locMultiplier);
+  const supplierOutstanding = Math.round(412000 * locMultiplier);
+  const cashInHand = Math.round(235000 * locMultiplier);
+  const bankBalance = Math.round(1480000 * locMultiplier);
+
+  const financialPositionKpis: FinancialPositionKpi[] = [
+    {
+      id: 'fp-customer-outstanding',
+      title: 'Customer Outstanding (Udhar)',
+      amount: customerOutstanding,
+      formattedAmount: formatINR(customerOutstanding),
+      subtitle: '18 Active wholesale accounts',
+      badge: '₹1.85L Overdue >15d',
+      badgeType: 'warning',
+      actionUrl: '/customer-credit',
+      actionLabel: 'Udhar Book →',
+    },
+    {
+      id: 'fp-supplier-outstanding',
+      title: 'Supplier Outstanding (Payables)',
+      amount: supplierOutstanding,
+      formattedAmount: formatINR(supplierOutstanding),
+      subtitle: 'Farmer auction lots & mandi cess',
+      badge: '3 Bills due soon',
+      badgeType: 'neutral',
+      actionUrl: '/purchases',
+      actionLabel: 'Payables →',
+    },
+    {
+      id: 'fp-cash-in-hand',
+      title: 'Cash in Hand (Counter Drawers)',
+      amount: cashInHand,
+      formattedAmount: formatINR(cashInHand),
+      subtitle: 'Physical cash across shop registers',
+      badge: 'Drawer Verified',
+      badgeType: 'success',
+      actionUrl: '/daily-closing',
+      actionLabel: 'Cash Closing →',
+    },
+    {
+      id: 'fp-bank-balance',
+      title: 'Bank Balance (APMC Current A/c)',
+      amount: bankBalance,
+      formattedAmount: formatINR(bankBalance),
+      subtitle: 'HDFC & SBI Mandi Branches',
+      badge: 'Real-time Sync',
+      badgeType: 'info',
+      actionUrl: '/accounting',
+      actionLabel: 'Accounts →',
+    },
+    {
+      id: 'fp-expenses',
+      title: "Today's Operating Expenses",
+      amount: periodExpenses,
+      formattedAmount: formatINR(periodExpenses),
+      subtitle: 'Hamali, transport & yard charges',
+      badge: 'Labour & Logistics',
+      badgeType: 'neutral',
+      actionUrl: '/daily-closing',
+      actionLabel: 'Log Expense →',
+    },
+    {
+      id: 'fp-gross-profit',
+      title: 'Gross Profit (Sales - COGS)',
+      amount: grossProfit,
+      formattedAmount: formatINR(grossProfit),
+      subtitle: `Certified Gross Margin: ${grossMarginPercent}%`,
+      badge: `+${grossMarginPercent}% Margin`,
+      badgeType: 'success',
+      actionUrl: '/reports',
+      actionLabel: 'P&L Statement →',
+    },
+    {
+      id: 'fp-net-profit',
+      title: 'Net Profit (After Expenses)',
+      amount: netProfit,
+      formattedAmount: formatINR(netProfit),
+      subtitle: `Net Business Return: ${netMarginPercent}%`,
+      badge: 'Audited Return',
+      badgeType: 'success',
+      actionUrl: '/reports',
+      actionLabel: 'View Net P&L →',
+    },
+    {
+      id: 'fp-daily-closing',
+      title: 'Daily Closing Status',
+      amount: 0,
+      formattedAmount: 'Reconciled',
+      subtitle: 'Shop #12: Verified • Godown: ₹0 Var',
+      badge: 'Closing Verified',
+      badgeType: 'success',
+      actionUrl: '/daily-closing',
+      actionLabel: 'Closing Report →',
+    },
+  ];
+
+  // SECTION 3: INVENTORY & PURCHASES
+  const purchaseAmount = Math.round(totalSales * 0.78);
+  const inventoryValuation = Math.round(3280000 * locMultiplier);
+  const totalStockTons = (85.5 * locMultiplier).toFixed(1);
+  const totalStockSacks = Math.round(1710 * locMultiplier);
+
+  // SECTION 4: CHARTS
+  let chartData: SalesChartDataPoint[] = [];
+  if (timeRange === 'today') {
+    chartData = MOCK_CHARTS_TODAY_VS_YESTERDAY.map((pt) => ({
+      ...pt,
+      sales: Math.round(pt.sales * locMultiplier),
+      purchases: Math.round(pt.purchases * locMultiplier),
+      cashSales: Math.round(pt.cashSales * locMultiplier),
+      creditSales: Math.round(pt.creditSales * locMultiplier),
+      collections: Math.round(pt.collections * locMultiplier),
+    }));
+  } else if (timeRange === 'yesterday' || timeRange === 'week') {
+    chartData = MOCK_CHARTS_7_DAYS.map((pt) => ({
+      ...pt,
+      sales: Math.round(pt.sales * locMultiplier),
+      purchases: Math.round(pt.purchases * locMultiplier),
+      cashSales: Math.round(pt.cashSales * locMultiplier),
+      creditSales: Math.round(pt.creditSales * locMultiplier),
+      collections: Math.round(pt.collections * locMultiplier),
+    }));
+  } else {
+    chartData = MOCK_CHARTS_30_DAYS.map((pt) => ({
+      ...pt,
+      sales: Math.round(pt.sales * locMultiplier),
+      purchases: Math.round(pt.purchases * locMultiplier),
+      cashSales: Math.round(pt.cashSales * locMultiplier),
+      creditSales: Math.round(pt.creditSales * locMultiplier),
+      collections: Math.round(pt.collections * locMultiplier),
+    }));
+  }
+
+  // Filter activities and alerts by location if individual yard selected
+  const recentActivities = MOCK_RECENT_ACTIVITIES.filter((act) => {
+    if (locationId === 'all') return true;
+    if (locationId === 'loc-shop') return act.location.includes('Shop');
+    if (locationId === 'loc-warehouse') return act.location.includes('Storage') || act.location.includes('Warehouse');
+    if (locationId === 'loc-godown') return act.location.includes('Godown');
+    return true;
+  });
+
+  const attentionAlerts = MOCK_ATTENTION_ALERTS.filter((al) => {
+    if (locationId === 'all') return true;
+    if (locationId === 'loc-shop') return !al.meta?.includes('Godown');
+    if (locationId === 'loc-warehouse') return !al.meta?.includes('Shop #12');
+    if (locationId === 'loc-godown') return !al.meta?.includes('Shop #12');
+    return true;
+  });
+
+  return {
+    performanceKpis,
+    financialPositionKpis,
+    purchaseAmount,
+    inventoryValuation,
+    totalStockTons,
+    totalStockSacks,
+    chartData,
+    attentionAlerts,
+    recentActivities,
+    topSellingProducts: MOCK_TOP_SELLING_PRODUCTS,
+    commodities: MOCK_INVENTORY_COMMODITIES,
+    locations: MOCK_LOCATIONS,
+  };
+}

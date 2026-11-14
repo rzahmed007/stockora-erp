@@ -1,5 +1,12 @@
 export * from './DashboardPage';
 export * from './components/DashboardHeader';
+export * from './components/BusinessPerformanceSection';
+export * from './components/FinancialPositionSection';
+export * from './components/InventoryPurchasesSection';
+export * from './components/PerformanceChartsSection';
+export * from './components/BusinessAttentionSection';
+export * from './components/RecentActivitySection';
+export * from './components/QuickActions';
 export * from './components/DashboardStats';
 export * from './components/SalesOverviewChart';
 export * from './components/InventoryOverview';
@@ -8,7 +15,5 @@ export * from './components/RecentSales';
 export * from './components/CustomerCreditOverview';
 export * from './components/PurchaseOverview';
 export * from './components/LowStockAlerts';
-export * from './components/QuickActions';
 export * from './types/dashboard.types';
 export * from './data/mockDashboardData';
-

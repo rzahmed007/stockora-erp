@@ -1,4 +1,5 @@
-export type TimeRange = 'today' | 'week' | 'month' | 'custom';
+export type TimeRange = 'today' | 'yesterday' | 'week' | 'month' | 'custom';
+export type DashboardLocationId = 'all' | 'loc-shop' | 'loc-warehouse' | 'loc-godown';
 
 export interface KpiMetric {
   id: string;
@@ -11,11 +12,41 @@ export interface KpiMetric {
   badge?: string;
 }
 
+export interface PerformanceKpi {
+  id: string;
+  title: string;
+  amount: number;
+  formattedAmount: string;
+  previousAmount: number;
+  formattedPreviousAmount: string;
+  comparisonLabel: string; // e.g. "vs. yesterday" or "vs. last week"
+  percentChange: number;
+  isPositive: boolean;
+  neutral?: boolean;
+  badge?: string;
+  actionUrl: string;
+}
+
+export interface FinancialPositionKpi {
+  id: string;
+  title: string;
+  amount: number;
+  formattedAmount: string;
+  subtitle: string;
+  badge?: string;
+  badgeType?: 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+  actionUrl: string;
+  actionLabel?: string;
+}
+
 export interface SalesChartDataPoint {
   day: string;
   date: string;
+  sales: number;
+  purchases: number;
   cashSales: number;
   creditSales: number;
+  collections: number;
   total: number;
 }
 
@@ -97,12 +128,46 @@ export interface LowStockAlertItem {
   urgency: 'Critical' | 'Warning';
 }
 
-export interface QuickActionItem {
+export interface BusinessAttentionAlert {
   id: string;
+  type:
+    | 'low_stock'
+    | 'overdue_payment'
+    | 'upcoming_due'
+    | 'supplier_due'
+    | 'pending_closing'
+    | 'closing_variance';
   title: string;
   description: string;
-  iconName: string;
-  badge?: string;
-  actionUrl?: string;
+  amount?: string;
+  urgency: 'critical' | 'warning' | 'info';
+  actionUrl: string;
+  actionText: string;
+  meta?: string;
 }
 
+export interface RecentBusinessActivity {
+  id: string;
+  dateTime: string;
+  type: 'sale' | 'purchase' | 'collection' | 'expense' | 'transfer';
+  refNo: string;
+  entityName: string;
+  location: string;
+  amount: number;
+  formattedAmount: string;
+  status: 'Completed' | 'Dispatched' | 'In-Transit' | 'Verified' | 'Pending';
+  statusType?: 'success' | 'warning' | 'info';
+}
+
+export interface TopSellingProduct {
+  id: string;
+  name: string;
+  variety: string;
+  sacksSold: number;
+  weightSoldKg: number;
+  revenue: number;
+  cost: number;
+  grossProfit: number;
+  marginPercent: number;
+  stockRemainingSacks: number;
+}

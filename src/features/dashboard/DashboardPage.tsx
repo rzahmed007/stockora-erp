@@ -1,27 +1,24 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { DashboardHeader } from './components/DashboardHeader';
-import { DashboardStats } from './components/DashboardStats';
-import { SalesOverviewChart } from './components/SalesOverviewChart';
-import { InventoryOverview } from './components/InventoryOverview';
-import { LocationOverview } from './components/LocationOverview';
-import { RecentSales } from './components/RecentSales';
-import { CustomerCreditOverview } from './components/CustomerCreditOverview';
-import { PurchaseOverview } from './components/PurchaseOverview';
-import { LowStockAlerts } from './components/LowStockAlerts';
+import { BusinessPerformanceSection } from './components/BusinessPerformanceSection';
+import { FinancialPositionSection } from './components/FinancialPositionSection';
+import { InventoryPurchasesSection } from './components/InventoryPurchasesSection';
+import { PerformanceChartsSection } from './components/PerformanceChartsSection';
+import { BusinessAttentionSection } from './components/BusinessAttentionSection';
+import { RecentActivitySection } from './components/RecentActivitySection';
 import { QuickActions } from './components/QuickActions';
-import { TimeRange } from './types/dashboard.types';
-import {
-  MOCK_KPIS,
-  MOCK_INVENTORY_COMMODITIES,
-  MOCK_LOCATIONS,
-  MOCK_RECENT_SALES,
-  MOCK_CUSTOMER_CREDIT,
-  MOCK_PURCHASES,
-  MOCK_LOW_STOCK_ALERTS,
-} from './data/mockDashboardData';
+import { TimeRange, DashboardLocationId } from './types/dashboard.types';
+import { getDashboardOverviewData } from './data/mockDashboardData';
+import { useSales } from '@/features/sales';
 
 export function DashboardPage() {
-  const [timeRange, setTimeRange] = useState<TimeRange>('week');
+  const { sales } = useSales();
+
+  // Dashboard Filters
+  const [locationId, setLocationId] = useState<DashboardLocationId>('all');
+  const [timeRange, setTimeRange] = useState<TimeRange>('today');
+  const [customStartDate, setCustomStartDate] = useState('2026-11-01');
+  const [customEndDate, setCustomEndDate] = useState('2026-11-15');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = () => {
@@ -31,51 +28,61 @@ export function DashboardPage() {
     }, 600);
   };
 
+  const handleCustomDatesChange = (start: string, end: string) => {
+    setCustomStartDate(start);
+    setCustomEndDate(end);
+  };
+
+  // Dynamically compute all dashboard sections using location filter, time range, and actual live sales state
+  const dashboardData = useMemo(() => {
+    return getDashboardOverviewData(locationId, timeRange, sales);
+  }, [locationId, timeRange, sales]);
+
   return (
-    <div className="space-y-6 pb-12 text-left animate-in fade-in-50 duration-200">
-      {/* 1. Dashboard Page Header */}
+    <div className="space-y-7 pb-16 text-left animate-in fade-in duration-200">
+      {/* DASHBOARD HEADER: Executive Overview, Location Selector, Period Selector, Refresh & Export */}
       <DashboardHeader
+        locationId={locationId}
+        onLocationChange={setLocationId}
         timeRange={timeRange}
         onTimeRangeChange={setTimeRange}
+        customStartDate={customStartDate}
+        customEndDate={customEndDate}
+        onCustomDatesChange={handleCustomDatesChange}
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
       />
 
-      {/* 2. Quick Actions Bar */}
+      {/* SECTION 7: QUICK BUSINESS ACTIONS */}
       <QuickActions />
 
-      {/* 3. 6 Key Business KPI Metric Cards */}
-      <DashboardStats metrics={MOCK_KPIS} />
+      {/* SECTION 1: BUSINESS PERFORMANCE (Sales, Cash, Udhar, Collections with Prior Period Comparisons) */}
+      <BusinessPerformanceSection kpis={dashboardData.performanceKpis} />
 
-      {/* 4. Sales Trends Chart (Cash vs Credit / Udhar) */}
-      <SalesOverviewChart />
+      {/* SECTION 2: FINANCIAL POSITION (Receivables, Payables, Cash in Hand, Bank, Gross & Net Profit, Closing Status) */}
+      <FinancialPositionSection kpis={dashboardData.financialPositionKpis} />
 
-      {/* 5. Inventory Overview (Onion, Garlic, Potato) & Critical Low Stock Warnings */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2">
-          <InventoryOverview commodities={MOCK_INVENTORY_COMMODITIES} />
-        </div>
-        <div className="xl:col-span-1">
-          <LowStockAlerts alerts={MOCK_LOW_STOCK_ALERTS} />
-        </div>
-      </div>
+      {/* SECTION 4: BUSINESS PERFORMANCE CHARTS (Sales vs Purchases, Cash vs Udhar, Collections Trend) */}
+      <PerformanceChartsSection
+        chartData={dashboardData.chartData}
+        timeRange={timeRange}
+      />
 
-      {/* 6. Yard & Locations Overview */}
-      <LocationOverview locations={MOCK_LOCATIONS} />
+      {/* SECTION 3: INVENTORY & PURCHASES (Purchases, Valuation, Stock, Low Stock Alerts, Top Products & Matrix) */}
+      <InventoryPurchasesSection
+        purchaseAmount={dashboardData.purchaseAmount}
+        inventoryValuation={dashboardData.inventoryValuation}
+        totalStockTons={dashboardData.totalStockTons}
+        totalStockSacks={dashboardData.totalStockSacks}
+        topSellingProducts={dashboardData.topSellingProducts}
+        commodities={dashboardData.commodities}
+      />
 
-      {/* 7. Recent Sales Transactions & Customer Credit (Udhar) Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        <div className="xl:col-span-7">
-          <RecentSales sales={MOCK_RECENT_SALES} />
-        </div>
-        <div className="xl:col-span-5">
-          <CustomerCreditOverview creditItems={MOCK_CUSTOMER_CREDIT} />
-        </div>
-      </div>
+      {/* SECTION 5: BUSINESS ATTENTION (Owner's Action Center for Overdues, Deficits & Variances) */}
+      <BusinessAttentionSection alerts={dashboardData.attentionAlerts} />
 
-      {/* 8. Recent Mandi Inward Purchases */}
-      <PurchaseOverview purchases={MOCK_PURCHASES} />
+      {/* SECTION 6: RECENT BUSINESS ACTIVITY (Sales Invoices, Purchases, Collections, Expenses, Transfers) */}
+      <RecentActivitySection activities={dashboardData.recentActivities} />
     </div>
   );
 }
-
