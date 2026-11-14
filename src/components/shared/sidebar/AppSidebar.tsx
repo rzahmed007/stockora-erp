@@ -36,7 +36,7 @@ export function AppSidebar({
         className={cn(
           'transition-[width] duration-300 ease-in-out z-30 shrink-0 select-none',
           // Desktop sizing
-          'hidden lg:flex flex-col',
+          'hidden lg:flex flex-col h-full',
           isCollapsed ? 'w-[76px]' : 'w-[270px]',
           // Mobile drawer
           isMobileOpen &&

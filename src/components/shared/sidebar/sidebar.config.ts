@@ -106,7 +106,7 @@ export const sidebarSections: SidebarSection[] = [
         ],
       },
       {
-        title: 'Customers & Credit',
+        title: 'Customers',
         href: '/customers',
         icon: Users,
         badge: 'Udhar',
