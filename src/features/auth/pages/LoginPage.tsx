@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Loader2, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Loader2, ArrowRight, KeyRound } from 'lucide-react';
 import { AuthFormContainer } from '../components/AuthFormContainer';
 import { AuthInput } from '../components/AuthInput';
 import { PasswordInput } from '../components/PasswordInput';
@@ -11,15 +11,31 @@ import {
 } from '../types/auth.types';
 
 export function LoginPage() {
+  const navigate = useNavigate();
+
+  // Prefilled with default credentials for instant access
   const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
-    password: '',
-    rememberMe: false,
+    email: 'admin@stockora.com',
+    password: 'password123',
+    rememberMe: true,
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState<AuthNotification | null>(null);
+
+  const fillDemoCredentials = () => {
+    setFormData({
+      email: 'admin@stockora.com',
+      password: 'password123',
+      rememberMe: true,
+    });
+    setErrors({});
+    setNotification({
+      type: 'info',
+      message: 'Demo credentials filled: admin@stockora.com / password123',
+    });
+  };
 
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof LoginFormData, string>> = {};
@@ -48,26 +64,31 @@ export function LoginPage() {
 
     setIsLoading(true);
 
-    // Simulate authentication API call
+    // Simulate authentication API call then navigate to Dashboard
     setTimeout(() => {
       setIsLoading(false);
       setNotification({
         type: 'success',
-        message: 'Welcome back! Authentication successful.',
+        message: 'Welcome back! Authentication successful. Entering Stockora ERP...',
       });
 
-      // In real scenario, redirect to dashboard or requested page
       setTimeout(() => {
-        // Mock successful sign-in
-      }, 800);
-    }, 900);
+        navigate('/dashboard');
+      }, 500);
+    }, 600);
   };
 
   const handleSocialLogin = (provider: SocialProvider) => {
+    setIsLoading(true);
     setNotification({
       type: 'info',
-      message: `Connecting with ${provider === 'google' ? 'Google' : 'Microsoft'}... (Mock)`,
+      message: `Connecting with ${provider === 'google' ? 'Google' : 'Microsoft'}...`,
     });
+
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate('/dashboard');
+    }, 800);
   };
 
   return (
@@ -78,15 +99,29 @@ export function LoginPage() {
       showSocialLogin
       onSocialLogin={handleSocialLogin}
       footer={
-        <p className="text-sm text-[#6B7280]">
-          Don&apos;t have an account?{' '}
-          <Link
-            to="/signup"
-            className="font-semibold text-[#003A41] hover:underline"
-          >
-            Create Account
-          </Link>
-        </p>
+        <div className="space-y-3">
+          <p className="text-sm text-[#6B7280]">
+            Don&apos;t have an account?{' '}
+            <Link
+              to="/signup"
+              className="font-semibold text-[#003A41] hover:underline"
+            >
+              Create Account
+            </Link>
+          </p>
+
+          {/* Quick Demo Helper */}
+          <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
+            <button
+              type="button"
+              onClick={fillDemoCredentials}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#003A41]/10 text-[#003A41] text-xs font-semibold hover:bg-[#003A41]/20 transition-colors"
+            >
+              <KeyRound className="h-3.5 w-3.5" />
+              <span>Fill Demo Credentials (admin@stockora.com)</span>
+            </button>
+          </div>
+        </div>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>

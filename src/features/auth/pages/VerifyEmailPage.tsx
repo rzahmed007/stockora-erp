@@ -80,8 +80,8 @@ export function VerifyEmailPage() {
       setIsSuccess(true);
 
       setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+        navigate('/dashboard');
+      }, 1000);
     }, 900);
   };
 
